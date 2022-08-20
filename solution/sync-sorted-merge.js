@@ -7,9 +7,9 @@ function sortFunction(a,b){
 }
 
 module.exports = (logSources, printer) => {
-  var allLogs = []
-  for (var i=0; i<logSources.length;i++){
-    var logEntry = logSources[i].pop();
+  let allLogs = []
+  for (let i=0; i<logSources.length;i++){
+    let logEntry = logSources[i].pop();
     while(logEntry){
       allLogs.push(logEntry)
       logEntry=logSources[i].pop();

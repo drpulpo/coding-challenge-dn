@@ -10,11 +10,11 @@ function sortFunction(a,b){
 
 module.exports = (logSources, printer) => {
   return new Promise(async (resolve, reject) => {
-    var allLogs = []
+    let allLogs = []
     Promise.all(
       logSources.map(async (logSource)=>{
-        var logSourceEntries=[]
-        var logEntry = await logSource.popAsync();
+        let logSourceEntries=[]
+        let logEntry = await logSource.popAsync();
         while(logEntry){
           logSourceEntries.push(logEntry)
           logEntry = await logSource.popAsync();
