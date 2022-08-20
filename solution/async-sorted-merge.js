@@ -11,16 +11,23 @@ function sortFunction(a,b){
 module.exports = (logSources, printer) => {
   return new Promise(async (resolve, reject) => {
     var allLogs = []
-    for (var i=0; i<logSources.length;i++){
-    var logEntry = await logSources[i].popAsync();
-    while(logEntry){
-        allLogs.push(logEntry)
-        logEntry= await logSources[i].popAsync();
-      }
-    }
-    allLogs = allLogs.sort(sortFunction);
-    allLogs.forEach(log=>printer.print(log))
-    printer.done();
-    resolve(console.log("Async sort complete."));
+    Promise.all(
+      logSources.map(async (logSource)=>{
+        var logSourceEntries=[]
+        var logEntry = await logSource.popAsync();
+        while(logEntry){
+          logSourceEntries.push(logEntry)
+          logEntry = await logSource.popAsync();
+        } 
+        return logSourceEntries;
+      })
+    ).then((values)=>{
+      allLogs = values.flat()
+      console.log(allLogs)
+      allLogs = allLogs.sort(sortFunction);
+      allLogs.forEach(log=>printer.print(log))
+      printer.done();
+      resolve(console.log("Async sort complete."));
+    })
   });
 };
